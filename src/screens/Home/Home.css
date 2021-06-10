@@ -1,0 +1,9 @@
+#upcoming-movies{
+    padding: 8px;
+    background-color: #ff9999;
+    text-align: center;
+    font-size: 1rem;
+}
+.poster-grid {
+    cursor: pointer;
+}
