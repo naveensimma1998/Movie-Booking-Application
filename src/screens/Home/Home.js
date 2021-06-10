@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import Header from '../../common/header/Header'
 import './Home.css'
+import ReactDOM from 'react-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+
 import moviesData from "../../common/moviesData.js";
+import Details from '../details/Details.js';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -39,6 +42,11 @@ const styles = theme => ({
         margin: theme.spacing(1),
         minWidth: 240,
         maxWidth: 240
+    },
+    GridListLeft: {
+        transform: 'translateZ(0)',
+        cursor: 'pointer',
+        margin: '0%'
     },
 
     title: {
@@ -84,14 +92,15 @@ genreSelectHandler = event => {
     this.setState({ releaseDateEnd: event.target.value });
   }
 
-
-
+  movieClickHandler = (movieId) => {
+    ReactDOM.render(<Details movieId={movieId} />, document.getElementById('root'));
+}
     render() {
         const { classes } = this.props;
         var filterMovie=moviesData.filter((movie)=>{
             return(movie.title=== this.state.movieName ||this.state.artists.includes( (movie.artists[0].first_name+" "+movie.artists[0].last_name)))
           })
-            if(this.state.movieName.length === 0  && this.state.artists.length === 0){
+        if(this.state.movieName.length === 0  && this.state.artists.length === 0){
               filterMovie=moviesData;
             }
         
@@ -102,9 +111,9 @@ genreSelectHandler = event => {
                     <span>Upcoming Movies</span>
                 </div>
                 <div>
-                    <GridList cols={5} className={classes.gridListUpcomingMovies}>
+                <GridList cols={5} className={classes.gridListUpcomingMovies}>
                         {moviesData.map((tile) => (
-                            <GridListTile key={tile.id} className="poster-grid">
+                            <GridListTile key={tile.id} className="poster-grid" >
                                 <img
                                     src={tile.poster_url}
                                     alt={tile.title}
@@ -117,16 +126,16 @@ genreSelectHandler = event => {
                 </div>
 <div className="flex-container">
 <div className="left">
-<GridList cols={4} cellHeight={350} className={classes.GridListLeft}>
+<GridList cols={5} cellHeight={350} className={classes.releasedMovies}>
 {filterMovie.map((movie) => (
-<GridListTile className="released-movies-grid-item">
-    <img src={moviesData.poster_url} alt ={moviesData.title} className="release-movie-poster"/>
-    <GridListTileBar title={filterMovie.title} 
-                    subtitle={<span>Release date : 
+<GridListTile  onClick={() => this.movieClickHandler(movie.id)} className="released-movie-grid-item" key={"grid" + movie.id}>
+ <img
+        src={movie.poster_url}
+        alt={movie.title}
+     className="movie-poster" />
+ <GridListTileBar title={movie.title} subtitle={<span>Release date : 
                         {new Date(filterMovie.release_date).toDateString }
-                        </span>} />
-    </GridListTile>
-    ))}
+                        </span>}/></GridListTile>))}
 </GridList>
 </div>
 

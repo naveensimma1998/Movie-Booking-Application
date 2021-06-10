@@ -28,3 +28,7 @@
     padding-top: 20px;
     width: 24%;
 }
+.released-movie-grid-item {
+    margin: 15px;
+    cursor: pointer;
+}
